@@ -14,8 +14,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllers();
 
+// all repositories 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+// all services
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

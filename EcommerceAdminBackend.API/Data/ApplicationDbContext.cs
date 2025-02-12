@@ -16,6 +16,17 @@ using Microsoft.EntityFrameworkCore;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Article>(entity =>
+            {
+                entity.ToTable("Articles_DE"); // Specify the table name here
+                entity.Property(e => e.Diameter).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Length).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.R).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Thickness).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Volume).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Weight).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Width).HasColumnType("decimal(18,2)");
+            });
             
             modelBuilder.Entity<ArticleXAvailableStock>()
                 .HasKey(a => new { a.ArticleId, a.CompanyStockLocationId });

@@ -541,3 +541,4 @@ C:/Users/SayidaliJama/ipcom-projects/EcommerceAdminBackend/EcommerceAdminBackend
 /Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/obj/Debug/net9.0/EcommerceAdminBackend.API.pdb
 /Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/obj/Debug/net9.0/EcommerceAdminBackend.API.genruntimeconfig.cache
 /Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/obj/Debug/net9.0/ref/EcommerceAdminBackend.API.dll
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/obj/Debug/net9.0/EcommerceAdminBackend.API.sourcelink.json
