@@ -13,10 +13,18 @@ public class ArticleRepository : IArticleRepository
         _context = context;
     }
     
-    public async Task<List<Article>> GetAllArticlesAsync()
-        {
-            return await _context.Articles.ToListAsync();
-        }
+    public async Task<List<Article>> GetAllArticlesAsync(int pageNumber, int pageSize)
+    {
+        return await _context.Articles
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<int> GetTotalArticlesCountAsync()
+    {
+        return await _context.Articles.CountAsync();
+    }
 
         public async Task<Article?> GetArticleByIdAsync(int id)
         {

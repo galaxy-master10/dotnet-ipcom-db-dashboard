@@ -1,10 +1,11 @@
 using EcommerceAdminBackend.API.Models;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Services;
 
 public interface IArticleService
 {
-    Task<List<Article>> GetAllArticlesAsync();
+        Task<PaginatedResponse<Article>> GetAllArticlesAsync(int pageNumber, int pageSize);
         Task<Article?> GetArticleByIdAsync(int id);
         Task<Article?> GetArticleByArticleIdAsync(int articleId);
         Task<List<Article>> GetArticlesByCodeAsync(string code);

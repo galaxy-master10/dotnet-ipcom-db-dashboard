@@ -1,5 +1,6 @@
 using EcommerceAdminBackend.API.Models;
 using EcommerceAdminBackend.API.Repositories;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Services;
 
@@ -12,11 +13,13 @@ public class ArticleService : IArticleService
         _articleRepository = articleRepository;
     }
     
-        public async Task<List<Article>> GetAllArticlesAsync()
-        {
-            var articles = await _articleRepository.GetAllArticlesAsync();
-            return articles ?? new List<Article>();
-        }
+        
+    public async Task<PaginatedResponse<Article>> GetAllArticlesAsync(int pageNumber, int pageSize)
+    {
+        var totalRecords = await _articleRepository.GetTotalArticlesCountAsync();
+        var articles = await _articleRepository.GetAllArticlesAsync(pageNumber, pageSize);
+        return new PaginatedResponse<Article>(articles, pageNumber, pageSize, totalRecords);
+    }
 
         public async Task<Article?> GetArticleByIdAsync(int id)
         {

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using EcommerceAdminBackend.API.Data;
 using EcommerceAdminBackend.API.Models;
 using EcommerceAdminBackend.API.Services;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Controllers
 {
@@ -23,12 +24,11 @@ namespace EcommerceAdminBackend.API.Controllers
         }
         
          [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> GetArticles()
-        {
-            var articles = await _articleService.GetAllArticlesAsync();
-            if (articles.Count == 0) return NotFound("No articles found.");
-            return Ok(articles);
-        }
+         public async Task<ActionResult<PaginatedResponse<Article>>> GetArticles(int pageNumber = 1, int pageSize = 10)
+         {
+             var paginatedArticles = await _articleService.GetAllArticlesAsync(pageNumber, pageSize);
+             return Ok(paginatedArticles);
+         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Article>> GetArticle(int id)

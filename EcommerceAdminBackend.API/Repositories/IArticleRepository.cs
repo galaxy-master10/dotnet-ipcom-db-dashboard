@@ -4,7 +4,10 @@ namespace EcommerceAdminBackend.API.Repositories;
 
 public interface IArticleRepository
 {
-    Task<List<Article>> GetAllArticlesAsync();
+ 
+    Task<List<Article>> GetAllArticlesAsync(int pageNumber, int pageSize);
+    Task<int> GetTotalArticlesCountAsync();
+    
     Task<Article?> GetArticleByIdAsync(int id);
   
     // ✅ Search by Unique Identifiers
