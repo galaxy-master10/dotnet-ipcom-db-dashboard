@@ -18,10 +18,12 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IArticlePackagingBreakdownRepository, ArticlePackagingBreakdownRepository>();
+builder.Services.AddScoped<IArticleXAvailableStockRepository, ArticleXAvailableStockRepository>();
+
 // all services
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<IArticlePackagingBreakdownService, ArticlePackagingBreakdownService>();
+builder.Services.AddScoped<IArticleXAvailableStockService, ArticleXAvailableStockService>();
 
 
 builder.Services.AddEndpointsApiExplorer();

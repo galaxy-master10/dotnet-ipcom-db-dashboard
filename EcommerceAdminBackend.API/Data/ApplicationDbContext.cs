@@ -33,8 +33,11 @@ using Microsoft.EntityFrameworkCore;
                 entity.ToTable("ArticlePackagingBreakdown"); // Specify the correct table name here
             });
             
-            modelBuilder.Entity<ArticleXAvailableStock>()
-                .HasKey(a => new { a.ArticleId, a.CompanyStockLocationId });
+            modelBuilder.Entity<ArticleXAvailableStock>(entity =>
+            {
+                entity.ToTable("ArticleXAvailableStock"); // Ensure this matches the table name in the database
+                entity.HasKey(a => new { a.ArticleId, a.CompanyStockLocationId });
+            });
 
             base.OnModelCreating(modelBuilder);
         }
