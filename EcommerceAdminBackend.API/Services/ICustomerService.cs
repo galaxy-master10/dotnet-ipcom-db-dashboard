@@ -1,11 +1,12 @@
 using EcommerceAdminBackend.API.Models;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Services;
 
 public interface ICustomerService
 {
     
-    Task<List<Customer>> GetAllCustomersAsync();
+    Task<PaginatedResponse<Customer>> GetAllCustomersAsync(int pageNumber, int pageSize);
     Task<Customer?> GetCustomerByIdAsync(int id);
     Task<Customer?> GetCustomerByCustomerIdAsync(int customerId);
     Task<Customer?> GetCustomerByCustomerContactIdAsync(int customerContactId);

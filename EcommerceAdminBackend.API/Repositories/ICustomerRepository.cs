@@ -4,7 +4,8 @@ namespace EcommerceAdminBackend.API.Repositories;
 
 public interface ICustomerRepository
 {
-    Task<List<Customer>> GetAllCustomersAsync();
+    Task<List<Customer>> GetAllCustomersAsync(int pageNumber, int pageSize);
+    Task<int> GetTotalCustomersCountAsync();
     Task<Customer?> GetCustomerByIdAsync(int id);
     Task<Customer?> GetCustomerByCustomerIdAsync(int customerId);
     Task<Customer?> GetCustomerByCustomerContactIdAsync(int customerContactId);

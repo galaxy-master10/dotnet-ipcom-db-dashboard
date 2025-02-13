@@ -1,5 +1,6 @@
 using EcommerceAdminBackend.API.Models;
 using EcommerceAdminBackend.API.Repositories;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Services;
 
@@ -11,12 +12,13 @@ public class CustomerService : ICustomerService
     {
         _customerRepository = customerRepository;
     }
+    public async Task<PaginatedResponse<Customer>> GetAllCustomersAsync(int pageNumber, int pageSize)
+    {
+        var totalRecords = await _customerRepository.GetTotalCustomersCountAsync();
+        var customers = await _customerRepository.GetAllCustomersAsync(pageNumber, pageSize);
+        return new PaginatedResponse<Customer>(customers, pageNumber, pageSize, totalRecords);
+    }
     
-    public async Task<List<Customer>> GetAllCustomersAsync()
-        {
-            return await _customerRepository.GetAllCustomersAsync();
-        }
-
         public async Task<Customer?> GetCustomerByIdAsync(int id)
         {
             return await _customerRepository.GetCustomerByIdAsync(id);

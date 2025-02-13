@@ -13,6 +13,18 @@ public class CustomerRepository: ICustomerRepository
         _context = context;
     }
 
+    public async Task<List<Customer>> GetAllCustomersAsync(int pageNumber, int pageSize)
+    {
+        return await _context.Customers
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<int> GetTotalCustomersCountAsync()
+    {
+        return await _context.Customers.CountAsync();
+    }
 
    public async Task<List<Customer>> GetAllCustomersAsync()
         {

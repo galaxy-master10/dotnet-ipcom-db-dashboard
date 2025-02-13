@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EcommerceAdminBackend.API.Services;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Controllers
 {
@@ -21,11 +22,11 @@ namespace EcommerceAdminBackend.API.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<PaginatedResponse<Customer>>> GetCustomers(int pageNumber = 1, int pageSize = 10)
         {
-            var customers = await _customerService.GetAllCustomersAsync();
-            return Ok(customers);
-        } 
+            var paginatedCustomers = await _customerService.GetAllCustomersAsync(pageNumber, pageSize);
+            return Ok(paginatedCustomers);
+        }
         
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
