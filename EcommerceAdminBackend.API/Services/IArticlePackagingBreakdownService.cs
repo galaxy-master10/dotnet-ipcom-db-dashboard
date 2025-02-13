@@ -1,20 +1,13 @@
 using EcommerceAdminBackend.API.Models;
+using EcommerceAdminBackend.API.Utilities;
 
-namespace EcommerceAdminBackend.API.Repositories;
+namespace EcommerceAdminBackend.API.Services;
 
-public interface IArticlePackagingBreakdownRepository
+public interface IArticlePackagingBreakdownService
 {
-// ✅ Get all Article Packaging Breakdowns
-    Task<List<ArticlePackagingBreakdown>> GetAllArticlePackagingBreakdownsAsync(int pageNumber, int pageSize);
-    Task<int> GetTotalArticlePackagingBreakdownsCountAsync();
-
-    // ✅ Get by ID
+    Task<PaginatedResponse<ArticlePackagingBreakdown>> GetAllArticlePackagingBreakdownAsync(int pageNumber, int pageSize);
     Task<ArticlePackagingBreakdown?> GetArticlePackagingBreakdownByIdAsync(int id);
-
-    // ✅ Get by Article ID
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByArticleIdAsync(int articleId);
-
-    // ✅ Get by Units & Conversion Factors
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromUnitAsync(string fromUnit);
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToUnitAsync(string toUnit);
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromUnitIdAsync(int fromUnitId);
@@ -22,9 +15,10 @@ public interface IArticlePackagingBreakdownRepository
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromFactorAsync(decimal fromFactor);
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToFactorAsync(decimal toFactor);
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByCubesAsync(decimal cubes);
-
-    // ✅ Get by Status Flags
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByStatusInUseAsync(bool statusInUse);
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByIsERPAsync(bool isERP);
     Task<List<ArticlePackagingBreakdown>> GetBreakdownsByIsMinimumPackagingAsync(bool isMinimumPackaging);
+    
+    
+    
 }

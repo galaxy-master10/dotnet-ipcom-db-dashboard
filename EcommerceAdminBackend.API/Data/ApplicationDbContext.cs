@@ -28,6 +28,11 @@ using Microsoft.EntityFrameworkCore;
                 entity.Property(e => e.Width).HasColumnType("decimal(18,2)");
             });
             
+            modelBuilder.Entity<ArticlePackagingBreakdown>(entity =>
+            {
+                entity.ToTable("ArticlePackagingBreakdown"); // Specify the correct table name here
+            });
+            
             modelBuilder.Entity<ArticleXAvailableStock>()
                 .HasKey(a => new { a.ArticleId, a.CompanyStockLocationId });
 

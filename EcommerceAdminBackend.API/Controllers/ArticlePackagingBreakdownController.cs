@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EcommerceAdminBackend.API.Data;
 using EcommerceAdminBackend.API.Models;
+using EcommerceAdminBackend.API.Services;
+using EcommerceAdminBackend.API.Utilities;
 
 namespace EcommerceAdminBackend.API.Controllers
 {
@@ -10,95 +12,95 @@ namespace EcommerceAdminBackend.API.Controllers
     [ApiController]
     public class ArticlePackagingBreakdownController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IArticlePackagingBreakdownService _articlePackagingBreakdownService;
 
-        public ArticlePackagingBreakdownController(ApplicationDbContext context)
+        public ArticlePackagingBreakdownController(IArticlePackagingBreakdownService articlePackagingBreakdownService)
         {
-            _context = context;
+            _articlePackagingBreakdownService = articlePackagingBreakdownService;
         }
+        
 
-        // GET: api/ArticlePackagingBreakdown
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ArticlePackagingBreakdown>>> GetArticlePackagingBreakdowns()
-        {
-            return await _context.ArticlePackagingBreakdowns.ToListAsync();
+       [HttpGet]
+        public async Task<ActionResult<PaginatedResponse<ArticlePackagingBreakdown>>> GetArticlePackagingBreakdown(int pageNumber = 1, int pageSize = 10){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetAllArticlePackagingBreakdownAsync(pageNumber, pageSize);
+            return Ok(articlePackagingBreakdown);
         }
-
-        // GET: api/ArticlePackagingBreakdown/5
+        
+        // give me the rest of the endpoints
+        
         [HttpGet("{id}")]
-        public async Task<ActionResult<ArticlePackagingBreakdown>> GetArticlePackagingBreakdown(int id)
-        {
-            var articlePackagingBreakdown = await _context.ArticlePackagingBreakdowns.FindAsync(id);
-
-            if (articlePackagingBreakdown == null)
-            {
-                return NotFound();
-            }
-
-            return articlePackagingBreakdown;
+        public async Task<ActionResult<ArticlePackagingBreakdown>> GetArticlePackagingBreakdownById(int id){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetArticlePackagingBreakdownByIdAsync(id);
+            return Ok(articlePackagingBreakdown);
         }
-
-        // PUT: api/ArticlePackagingBreakdown/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutArticlePackagingBreakdown(int id, ArticlePackagingBreakdown articlePackagingBreakdown)
-        {
-            if (id != articlePackagingBreakdown.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(articlePackagingBreakdown).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ArticlePackagingBreakdownExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+        
+        [HttpGet("articleid/{articleId}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByArticleId(int articleId){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByArticleIdAsync(articleId);
+            return Ok(articlePackagingBreakdown);
         }
-
-        // POST: api/ArticlePackagingBreakdown
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ArticlePackagingBreakdown>> PostArticlePackagingBreakdown(ArticlePackagingBreakdown articlePackagingBreakdown)
-        {
-            _context.ArticlePackagingBreakdowns.Add(articlePackagingBreakdown);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetArticlePackagingBreakdown", new { id = articlePackagingBreakdown.Id }, articlePackagingBreakdown);
+        
+        [HttpGet("fromunit/{fromUnit}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByFromUnit(string fromUnit){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByFromUnitAsync(fromUnit);
+            return Ok(articlePackagingBreakdown);
         }
-
-        // DELETE: api/ArticlePackagingBreakdown/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteArticlePackagingBreakdown(int id)
-        {
-            var articlePackagingBreakdown = await _context.ArticlePackagingBreakdowns.FindAsync(id);
-            if (articlePackagingBreakdown == null)
-            {
-                return NotFound();
-            }
-
-            _context.ArticlePackagingBreakdowns.Remove(articlePackagingBreakdown);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+        
+        [HttpGet("tounit/{toUnit}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByToUnit(string toUnit){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByToUnitAsync(toUnit);
+            return Ok(articlePackagingBreakdown);
         }
-
-        private bool ArticlePackagingBreakdownExists(int id)
-        {
-            return _context.ArticlePackagingBreakdowns.Any(e => e.Id == id);
+        
+        [HttpGet("fromunitid/{fromUnitId}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByFromUnitId(int fromUnitId){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByFromUnitIdAsync(fromUnitId);
+            return Ok(articlePackagingBreakdown);
         }
+        
+        [HttpGet("tounitid/{toUnitId}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByToUnitId(int toUnitId){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByToUnitIdAsync(toUnitId);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+        [HttpGet("fromfactor/{fromFactor}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByFromFactor(decimal fromFactor){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByFromFactorAsync(fromFactor);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+        [HttpGet("tofactor/{toFactor}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByToFactor(decimal toFactor){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByToFactorAsync(toFactor);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+        [HttpGet("cubes/{cubes}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByCubes(decimal cubes){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByCubesAsync(cubes);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+        [HttpGet("statusinuse/{statusInUse}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByStatusInUse(bool statusInUse){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByStatusInUseAsync(statusInUse);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+        [HttpGet("iserp/{isERP}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByIsERP(bool isERP){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByIsERPAsync(isERP);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+        [HttpGet("isminimumpackaging/{isMinimumPackaging}")]
+        public async Task<ActionResult<List<ArticlePackagingBreakdown>>> GetBreakdownsByIsMinimumPackaging(bool isMinimumPackaging){
+            var articlePackagingBreakdown = await _articlePackagingBreakdownService.GetBreakdownsByIsMinimumPackagingAsync(isMinimumPackaging);
+            return Ok(articlePackagingBreakdown);
+        }
+        
+
+       
     }
 }
