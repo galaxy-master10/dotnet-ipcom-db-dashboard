@@ -215,4 +215,24 @@ public class ArticleRepository : IArticleRepository
         {
             return await _context.Articles.Where(a => a.Index == index).ToListAsync();
         }
+
+        public async Task<List<Article>> GetArticlesByRAsync(decimal r)
+        {
+            return await _context.Articles.Where(a => a.R == r).ToListAsync();
+        }
+
+        public async Task<List<Article>> GetArticlesByRUnitAsync(string rUnit)
+        {
+            return await _context.Articles.Where(a => a.RUnit == rUnit).ToListAsync();
+        }
+
+        public async Task<List<Article>> GetArticlesByApplicationAsync(string application)
+        {
+            return await _context.Articles.Where(a => a.Application == application).ToListAsync();
+        }
+
+        public async Task<List<Article>> GetArticlesByExtraInfoAsync(string extraInfo)
+        {
+            return await _context.Articles.Where(a => a.ExtraInfo == extraInfo).ToListAsync();
+        }
 }

@@ -312,5 +312,73 @@ namespace EcommerceAdminBackend.API.Controllers
         }
         
         
+        [HttpGet("description/{description}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByDescription(string description)
+        {
+            var articles = await _articleService.GetArticlesByDescriptionAsync(description);
+            if (articles.Count == 0) return NotFound("No articles found for the given description.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("application/{application}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByApplication(string application)
+        {
+            var articles = await _articleService.GetArticlesByApplicationAsync(application);
+            if (articles.Count == 0) return NotFound("No articles found for the given application.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("extraInfo/{extraInfo}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByExtraInfo(string extraInfo)
+        {
+            var articles = await _articleService.GetArticlesByExtraInfoAsync(extraInfo);
+            if (articles.Count == 0) return NotFound("No articles found for the given extra info.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("product/{product}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByProduct(string product)
+        {
+            var articles = await _articleService.GetArticlesByProductAsync(product);
+            if (articles.Count == 0) return NotFound("No articles found for the given product.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("productdescription/{productDescription}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByProductDescription(string productDescription)
+        {
+            var articles = await _articleService.GetArticlesByProductDescriptionAsync(productDescription);
+            if (articles.Count == 0) return NotFound("No articles found for the given product description.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("productgroup/{productGroup}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByProductGroup(string productGroup)
+        {
+            var articles = await _articleService.GetArticlesByProductGroupAsync(productGroup);
+            if (articles.Count == 0) return NotFound("No articles found for the given product group.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("r/{r}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByR(decimal r)
+        {
+            var articles = await _articleService.GetArticlesByRAsync(r);
+            if (articles.Count == 0) return NotFound("No articles found for the given r.");
+            return Ok(articles);
+        }
+        
+        [HttpGet("runit/{rUnit}")]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByRUnit(string rUnit)
+        {
+            var articles = await _articleService.GetArticlesByRUnitAsync(rUnit);
+            if (articles.Count == 0) return NotFound("No articles found for the given r unit.");
+            return Ok(articles);
+        }
+        
+        
+        
+        
+        
     }
 }

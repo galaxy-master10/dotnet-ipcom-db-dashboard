@@ -305,4 +305,42 @@ public class ArticleService : IArticleService
             }
             return await _articleRepository.GetArticlesByIndexAsync(index);
         }
+
+        public async Task<List<Article>> GetArticlesByRAsync(decimal r)
+        {
+            if (r <= 0)
+            {
+                return new List<Article>();
+            }
+            return await _articleRepository.GetArticlesByRAsync(r);
+        }
+
+        public async Task<List<Article>> GetArticlesByRUnitAsync(string rUnit)
+        {
+            if (string.IsNullOrWhiteSpace(rUnit))
+            {
+                return new List<Article>();
+            }
+            return await _articleRepository.GetArticlesByRUnitAsync(rUnit);
+        }
+
+        
+
+        public async Task<List<Article>> GetArticlesByApplicationAsync(string application)
+        {
+            if (string.IsNullOrWhiteSpace(application))
+            {
+                return new List<Article>();
+            }
+            return await _articleRepository.GetArticlesByApplicationAsync(application);
+        }
+
+        public async Task<List<Article>> GetArticlesByExtraInfoAsync(string extraInfo)
+        {
+            if (string.IsNullOrWhiteSpace(extraInfo))
+            {
+                return new List<Article>();
+            }
+            return await _articleRepository.GetArticlesByExtraInfoAsync(extraInfo);
+        }
 }

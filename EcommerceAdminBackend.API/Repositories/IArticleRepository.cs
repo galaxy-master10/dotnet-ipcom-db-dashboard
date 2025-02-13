@@ -54,5 +54,9 @@ public interface IArticleRepository
         Task<List<Article>> GetArticlesByPackagingUnitIdAsync(int packagingUnitId);
         Task<List<Article>> GetArticlesByProductIdAsync(Guid productId);
         Task<List<Article>> GetArticlesByIndexAsync(int index);
+        Task<List<Article>> GetArticlesByRAsync(decimal r);
+        Task<List<Article>> GetArticlesByRUnitAsync(string rUnit);
+        Task<List<Article>> GetArticlesByApplicationAsync(string application);
+        Task<List<Article>> GetArticlesByExtraInfoAsync(string extraInfo);
     
 }
