@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using EcommerceAdminBackend.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EcommerceAdminBackend.API.Data;
-using EcommerceAdminBackend.API.Models;
-using EcommerceAdminBackend.API.Services;
-using EcommerceAdminBackend.API.Utilities;
+using EcommerceAdminBackend.Domain.Entities;
+using EcommerceAdminBackend.Shared.Common.Utilities;
 
 namespace EcommerceAdminBackend.API.Controllers
+
 {
     [Route("api/[controller]")]
     [ApiController]

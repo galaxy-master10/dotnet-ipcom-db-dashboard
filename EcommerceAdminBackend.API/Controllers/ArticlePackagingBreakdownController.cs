@@ -1,10 +1,7 @@
-
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using EcommerceAdminBackend.API.Data;
-using EcommerceAdminBackend.API.Models;
-using EcommerceAdminBackend.API.Services;
-using EcommerceAdminBackend.API.Utilities;
+using EcommerceAdminBackend.Domain.Entities;
+using EcommerceAdminBackend.Domain.Interfaces;
+using EcommerceAdminBackend.Shared.Common.Utilities;
 
 namespace EcommerceAdminBackend.API.Controllers
 {

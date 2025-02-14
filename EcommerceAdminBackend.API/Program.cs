@@ -1,9 +1,9 @@
 
-using EcommerceAdminBackend.API.Data;
-using EcommerceAdminBackend.API.Models;
-using EcommerceAdminBackend.API.Repositories;
-using EcommerceAdminBackend.API.Services;
+using EcommerceAdminBackend.Domain.Interfaces;
+using EcommerceAdminBackend.Infrastructure.Persistence.Context;
+using EcommerceAdminBackend.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using EcommerceAdminBackend.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +23,7 @@ builder.Services.AddScoped<IArticleXAvailableStockRepository, ArticleXAvailableS
 // all services
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IArticlePackagingBreakdownService, ArticlePackagingBreakdownService>();
 builder.Services.AddScoped<IArticleXAvailableStockService, ArticleXAvailableStockService>();
 
 

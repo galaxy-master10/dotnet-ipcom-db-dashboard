@@ -24,7 +24,15 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
-      <Folder Include="Migrations\" />
+    </ItemGroup>
+    <ItemGroup>
+        <!-- API depends on Application and Infrastructure -->
+        <ProjectReference Include="..\EcommerceAdminBackend.Application\EcommerceAdminBackend.Application.csproj" />
+        <ProjectReference Include="..\EcommerceAdminBackend.Infrastructure\EcommerceAdminBackend.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EcommerceAdminBackend.Domain\EcommerceAdminBackend.Domain.csproj" />
     </ItemGroup>
 
 </Project>
