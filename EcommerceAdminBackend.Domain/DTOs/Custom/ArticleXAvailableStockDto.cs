@@ -1,6 +1,6 @@
-namespace EcommerceAdminBackend.Application.DTOs;
+namespace EcommerceAdminBackend.Domain.DTOs.Custom;
 
-public class ArticleXAvailableStockFilterDto
+public class ArticleXAvailableStockDto
 {
     public int? ArticleId { get; set; }
     public int? CompanyStockLocationId { get; set; }

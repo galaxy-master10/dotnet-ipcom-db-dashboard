@@ -1,5 +1,6 @@
 
 
+using EcommerceAdminBackend.Domain.DTOs.Custom;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Infrastructure.Persistence.Context;
@@ -16,106 +17,82 @@ public class CustomerRepository: ICustomerRepository
         _context = context;
     }
 
-    public async Task<List<Customer>> GetAllCustomersAsync(int pageNumber, int pageSize)
-    {
-        return await _context.Customers
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-    }
-
-    public async Task<int> GetTotalCustomersCountAsync()
-    {
-        return await _context.Customers.CountAsync();
-    }
-
-
-
-        public async Task<Customer?> GetCustomerByIdAsync(int id)
+    public async Task<Customer?> GetByIdAsync(int id)
         {
             return await _context.Customers.FindAsync(id);
         }
 
-        public async Task<Customer?> GetCustomerByCustomerIdAsync(int customerId)
+        public async Task<(List<Customer> Items, int TotalCount)> GetFilteredAsync(
+            CustomerFilterDto filter, int pageNumber, int pageSize)
         {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
-        }
+            var query = _context.Customers.AsQueryable();
 
-        public async Task<Customer?> GetCustomerByCustomerContactIdAsync(int customerContactId)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.CustomerContactId == customerContactId);
-        }
+            // Apply filters
+            if (filter.Id.HasValue)
+                query = query.Where(x => x.Id == filter.Id);
 
-        public async Task<Customer?> GetCustomerBySourceIdAsync(string sourceId)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.SourceId == sourceId);
-        }
+            if (filter.CustomerId.HasValue)
+                query = query.Where(x => x.CustomerId == filter.CustomerId);
 
-        public async Task<Customer?> GetCustomerByVatNumberAsync(string vatNumber)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.VatNumber == vatNumber);
-        }
+            if (filter.CustomerContactId.HasValue)
+                query = query.Where(x => x.CustomerContactId == filter.CustomerContactId);
 
-        public async Task<Customer?> GetCustomerByEmailAsync(string email)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.Email == email);
-        }
+            if (!string.IsNullOrEmpty(filter.SourceId))
+                query = query.Where(x => x.SourceId == filter.SourceId);
 
-        public async Task<Customer?> GetCustomerByMobileAsync(string mobile)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.Mobile == mobile);
-        }
+            if (!string.IsNullOrEmpty(filter.CustomerName))
+                query = query.Where(x => x.CustomerName.Contains(filter.CustomerName));
 
-        public async Task<Customer?> GetCustomerByWebAsync(string web)
-        {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.Web == web);
-        }
+            if (!string.IsNullOrEmpty(filter.AddressStreet))
+                query = query.Where(x => x.AddressStreet.Contains(filter.AddressStreet));
 
-        public async Task<List<Customer>> GetCustomersByFirstNameAsync(string firstName)
-        {
-            return await _context.Customers.Where(c => c.FirstName == firstName).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.AddressNumber))
+                query = query.Where(x => x.AddressNumber == filter.AddressNumber);
 
-        public async Task<List<Customer>> GetCustomersByNameAsync(string name)
-        {
-            return await _context.Customers.Where(c => c.Name.Contains(name)).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.AddressPostalCode))
+                query = query.Where(x => x.AddressPostalCode == filter.AddressPostalCode);
 
-        public async Task<List<Customer>> GetCustomersByLanguageAsync(string language)
-        {
-            return await _context.Customers.Where(c => c.Language == language).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.AddressCity))
+                query = query.Where(x => x.AddressCity.Contains(filter.AddressCity));
 
-        public async Task<List<Customer>> GetCustomersByAddressStreetAsync(string addressStreet)
-        {
-            return await _context.Customers.Where(c => c.AddressStreet == addressStreet).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.AddressCountry))
+                query = query.Where(x => x.AddressCountry == filter.AddressCountry);
 
-        public async Task<List<Customer>> GetCustomersByAddressNumberAsync(string addressNumber)
-        {
-            return await _context.Customers.Where(c => c.AddressNumber == addressNumber).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Web))
+                query = query.Where(x => x.Web == filter.Web);
 
-        public async Task<List<Customer>> GetCustomersByAddressPostalCodeAsync(string addressPostalCode)
-        {
-            return await _context.Customers.Where(c => c.AddressPostalCode == addressPostalCode).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.VatNumber))
+                query = query.Where(x => x.VatNumber == filter.VatNumber);
 
-        public async Task<List<Customer>> GetCustomersByAddressCityAsync(string addressCity)
-        {
-            return await _context.Customers.Where(c => c.AddressCity == addressCity).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.FirstName))
+                query = query.Where(x => x.FirstName.Contains(filter.FirstName));
 
-        public async Task<List<Customer>> GetCustomersByAddressCountryAsync(string addressCountry)
-        {
-            return await _context.Customers.Where(c => c.AddressCountry == addressCountry).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Name))
+                query = query.Where(x => x.Name.Contains(filter.Name));
 
-        public async Task<List<Customer>> GetCustomersByCreatedTSAsync(DateTime createdTS)
-        {
-            return await _context.Customers
-                .Where(c => c.CreatedTS.HasValue && c.CreatedTS.Value.Date == createdTS.Date)
+            if (!string.IsNullOrEmpty(filter.Email))
+                query = query.Where(x => x.Email == filter.Email);
+
+            if (!string.IsNullOrEmpty(filter.Language))
+                query = query.Where(x => x.Language == filter.Language);
+
+            if (!string.IsNullOrEmpty(filter.Mobile))
+                query = query.Where(x => x.Mobile == filter.Mobile);
+
+            if (filter.CreatedTS.HasValue)
+                query = query.Where(x => x.CreatedTS.HasValue && 
+                    x.CreatedTS.Value.Date == filter.CreatedTS.Value.Date);
+
+            // Get total count before pagination
+            var totalCount = await query.CountAsync();
+
+            // Apply pagination
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
-        }
 
+            return (items, totalCount);
+        }
+    
 }
