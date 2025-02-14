@@ -24,7 +24,11 @@ namespace EcommerceAdminBackend.API.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _articleXAvailableStockService.GetFilteredAsync(filter, pageNumber, pageSize);
+           if (result.Data.Count == 0)
+                return NotFound("No article available stock found matching the specified criteria.");
+
             return Ok(result);
+            
         }
         
         [HttpGet("{articleId}/{companyStockLocationId}")]

@@ -1,3 +1,4 @@
+using EcommerceAdminBackend.Domain.DTOs.Filters;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Infrastructure.Persistence.Context;
@@ -14,226 +15,146 @@ public class ArticleRepository : IArticleRepository
         _context = context;
     }
     
-    public async Task<List<Article>> GetAllArticlesAsync(int pageNumber, int pageSize)
-    {
-        return await _context.Articles
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-    }
-
-    public async Task<int> GetTotalArticlesCountAsync()
-    {
-        return await _context.Articles.CountAsync();
-    }
-
-        public async Task<Article?> GetArticleByIdAsync(int id)
+      public async Task<Article?> GetByIdAsync(int id)
         {
             return await _context.Articles.FindAsync(id);
         }
 
-        public async Task<Article?> GetArticleByArticleIdAsync(int articleId)
+        public async Task<(List<Article> Items, int TotalCount)> GetFilteredAsync(
+            ArticleFilterDto filter, int pageNumber, int pageSize)
         {
-            return await _context.Articles.FirstOrDefaultAsync(a => a.ArticleId == articleId);
-        }
+            var query = _context.Articles.AsQueryable();
 
-        public async Task<List<Article>> GetArticlesByCodeAsync(string code)
-        {
-            return await _context.Articles.Where(a => a.Code == code).ToListAsync();
-        }
+            // Apply filters
+            if (filter.Id.HasValue)
+                query = query.Where(x => x.Id == filter.Id);
 
-        public async Task<List<Article>> GetArticlesByDescriptionAsync(string description)
-        {
-            return await _context.Articles.Where(a => a.Description.Contains(description)).ToListAsync();
-        }
+            if (filter.ArticleId.HasValue)
+                query = query.Where(x => x.ArticleId == filter.ArticleId);
 
-        public async Task<List<Article>> GetArticlesByProductAsync(string product)
-        {
-            return await _context.Articles.Where(a => a.Product == product).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Code))
+                query = query.Where(x => x.Code == filter.Code);
 
-        public async Task<List<Article>> GetArticlesByProductDescriptionAsync(string productDescription)
-        {
-            return await _context.Articles.Where(a => a.ProductDescription.Contains(productDescription)).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Description))
+                query = query.Where(x => x.Description.Contains(filter.Description));
 
-        public async Task<List<Article>> GetArticlesByProductGroupAsync(string productGroup)
-        {
-            return await _context.Articles.Where(a => a.ProductGroup == productGroup).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Product))
+                query = query.Where(x => x.Product == filter.Product);
 
-        public async Task<List<Article>> GetArticlesByProductSegmentationAsync(string productSegmentation)
-        {
-            return await _context.Articles.Where(a => a.ProductSegmentation == productSegmentation).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.ProductDescription))
+                query = query.Where(x => x.ProductDescription.Contains(filter.ProductDescription));
 
-        public async Task<List<Article>> GetArticlesByProductTypeAsync(string productType)
-        {
-            return await _context.Articles.Where(a => a.ProductType == productType).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.ProductGroup))
+                query = query.Where(x => x.ProductGroup == filter.ProductGroup);
 
-        public async Task<List<Article>> GetArticlesByCompetenceCenterAsync(string competenceCenter)
-        {
-            return await _context.Articles.Where(a => a.CompetenceCenter == competenceCenter).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.ProductSegmentation))
+                query = query.Where(x => x.ProductSegmentation == filter.ProductSegmentation);
 
-        public async Task<List<Article>> GetArticlesBySectorAsync(string sector)
-        {
-            return await _context.Articles.Where(a => a.Sector == sector).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.ProductType))
+                query = query.Where(x => x.ProductType == filter.ProductType);
 
-        public async Task<List<Article>> GetArticlesByMaterialAsync(string material)
-        {
-            return await _context.Articles.Where(a => a.Material == material).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.CompetenceCenter))
+                query = query.Where(x => x.CompetenceCenter == filter.CompetenceCenter);
 
-        public async Task<List<Article>> GetArticlesByBrandAsync(string brand)
-        {
-            return await _context.Articles.Where(a => a.Brand == brand).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Sector))
+                query = query.Where(x => x.Sector == filter.Sector);
 
-        public async Task<List<Article>> GetArticlesByTypeAsync(string type)
-        {
-            return await _context.Articles.Where(a => a.Type == type).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Material))
+                query = query.Where(x => x.Material == filter.Material);
 
-        public async Task<List<Article>> GetArticlesByFinishAsync(string finish)
-        {
-            return await _context.Articles.Where(a => a.Finish == finish).ToListAsync();
-        }
+            // Range filters for measurements
+            if (filter.MinDiameter.HasValue)
+                query = query.Where(x => x.Diameter >= filter.MinDiameter);
+            if (filter.MaxDiameter.HasValue)
+                query = query.Where(x => x.Diameter <= filter.MaxDiameter);
 
-        public async Task<List<Article>> GetArticlesByColorAsync(string color)
-        {
-            return await _context.Articles.Where(a => a.Color == color).ToListAsync();
-        }
+            if (filter.MinLength.HasValue)
+                query = query.Where(x => x.Length >= filter.MinLength);
+            if (filter.MaxLength.HasValue)
+                query = query.Where(x => x.Length <= filter.MaxLength);
 
-        public async Task<List<Article>> GetArticlesByFireClassAsync(string fireClass)
-        {
-            return await _context.Articles.Where(a => a.FireClass == fireClass).ToListAsync();
-        }
+            if (filter.MinThickness.HasValue)
+                query = query.Where(x => x.Thickness >= filter.MinThickness);
+            if (filter.MaxThickness.HasValue)
+                query = query.Where(x => x.Thickness <= filter.MaxThickness);
 
-        public async Task<List<Article>> GetArticlesByEdgeFinishAsync(string edgeFinish)
-        {
-            return await _context.Articles.Where(a => a.EdgeFinish == edgeFinish).ToListAsync();
-        }
+            if (filter.MinWidth.HasValue)
+                query = query.Where(x => x.Width >= filter.MinWidth);
+            if (filter.MaxWidth.HasValue)
+                query = query.Where(x => x.Width <= filter.MaxWidth);
 
-        public async Task<List<Article>> GetArticlesByCoatingAsync(string coating)
-        {
-            return await _context.Articles.Where(a => a.Coating == coating).ToListAsync();
-        }
+            if (filter.MinVolume.HasValue)
+                query = query.Where(x => x.Volume >= filter.MinVolume);
+            if (filter.MaxVolume.HasValue)
+                query = query.Where(x => x.Volume <= filter.MaxVolume);
 
-        public async Task<List<Article>> GetArticlesByDiameterAsync(decimal diameter)
-        {
-            return await _context.Articles.Where(a => a.Diameter == diameter).ToListAsync();
-        }
+            if (filter.MinWeight.HasValue)
+                query = query.Where(x => x.Weight >= filter.MinWeight);
+            if (filter.MaxWeight.HasValue)
+                query = query.Where(x => x.Weight <= filter.MaxWeight);
 
-        public async Task<List<Article>> GetArticlesByDiameterUnitAsync(string diameterUnit)
-        {
-            return await _context.Articles.Where(a => a.DiameterUnit == diameterUnit).ToListAsync();
-        }
+            if (filter.MinR.HasValue)
+                query = query.Where(x => x.R >= filter.MinR);
+            if (filter.MaxR.HasValue)
+                query = query.Where(x => x.R <= filter.MaxR);
 
-        public async Task<List<Article>> GetArticlesByLengthAsync(decimal length)
-        {
-            return await _context.Articles.Where(a => a.Length == length).ToListAsync();
-        }
+            // Unit filters
+            if (!string.IsNullOrEmpty(filter.DiameterUnit))
+                query = query.Where(x => x.DiameterUnit == filter.DiameterUnit);
 
-        public async Task<List<Article>> GetArticlesByLengthUnitAsync(string lengthUnit)
-        {
-            return await _context.Articles.Where(a => a.LengthUnit == lengthUnit).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.LengthUnit))
+                query = query.Where(x => x.LengthUnit == filter.LengthUnit);
 
-        public async Task<List<Article>> GetArticlesByThicknessAsync(decimal thickness)
-        {
-            return await _context.Articles.Where(a => a.Thickness == thickness).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.ThicknessUnit))
+                query = query.Where(x => x.ThicknessUnit == filter.ThicknessUnit);
 
-        public async Task<List<Article>> GetArticlesByThicknessUnitAsync(string thicknessUnit)
-        {
-            return await _context.Articles.Where(a => a.ThicknessUnit == thicknessUnit).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.WidthUnit))
+                query = query.Where(x => x.WidthUnit == filter.WidthUnit);
 
-        public async Task<List<Article>> GetArticlesByWidthAsync(decimal width)
-        {
-            return await _context.Articles.Where(a => a.Width == width).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.VolumeUnit))
+                query = query.Where(x => x.VolumeUnit == filter.VolumeUnit);
 
-        public async Task<List<Article>> GetArticlesByWidthUnitAsync(string widthUnit)
-        {
-            return await _context.Articles.Where(a => a.WidthUnit == widthUnit).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.WeightUnit))
+                query = query.Where(x => x.WeightUnit == filter.WeightUnit);
 
-        public async Task<List<Article>> GetArticlesByVolumeAsync(decimal volume)
-        {
-            return await _context.Articles.Where(a => a.Volume == volume).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.RUnit))
+                query = query.Where(x => x.RUnit == filter.RUnit);
 
-        public async Task<List<Article>> GetArticlesByVolumeUnitAsync(string volumeUnit)
-        {
-            return await _context.Articles.Where(a => a.VolumeUnit == volumeUnit).ToListAsync();
-        }
+            // Other filters
+            if (filter.Published.HasValue)
+                query = query.Where(x => x.Published == filter.Published);
 
-        public async Task<List<Article>> GetArticlesByWeightAsync(decimal weight)
-        {
-            return await _context.Articles.Where(a => a.Weight == weight).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Brand))
+                query = query.Where(x => x.Brand == filter.Brand);
 
-        public async Task<List<Article>> GetArticlesByWeightUnitAsync(string weightUnit)
-        {
-            return await _context.Articles.Where(a => a.WeightUnit == weightUnit).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Type))
+                query = query.Where(x => x.Type == filter.Type);
 
-        public async Task<List<Article>> GetPublishedArticlesAsync(bool published)
-        {
-            return await _context.Articles.Where(a => a.Published == published).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Finish))
+                query = query.Where(x => x.Finish == filter.Finish);
 
-        public async Task<List<Article>> GetArticlesByPricingUnitAsync(string pricingUnit)
-        {
-            return await _context.Articles.Where(a => a.PricingUnit == pricingUnit).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Color))
+                query = query.Where(x => x.Color == filter.Color);
 
-        public async Task<List<Article>> GetArticlesByPricingUnitIdAsync(int pricingUnitId)
-        {
-            return await _context.Articles.Where(a => a.PricingUnitId == pricingUnitId).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.FireClass))
+                query = query.Where(x => x.FireClass == filter.FireClass);
 
-        public async Task<List<Article>> GetArticlesByPackagingUnitAsync(string packagingUnit)
-        {
-            return await _context.Articles.Where(a => a.PackagingUnit == packagingUnit).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.EdgeFinish))
+                query = query.Where(x => x.EdgeFinish == filter.EdgeFinish);
 
-        public async Task<List<Article>> GetArticlesByPackagingUnitIdAsync(int packagingUnitId)
-        {
-            return await _context.Articles.Where(a => a.PackagingUnitId == packagingUnitId).ToListAsync();
-        }
+            if (!string.IsNullOrEmpty(filter.Coating))
+                query = query.Where(x => x.Coating == filter.Coating);
 
-        public async Task<List<Article>> GetArticlesByProductIdAsync(Guid productId)
-        {
-            return await _context.Articles.Where(a => a.ProductId == productId).ToListAsync();
-        }
+            // Get total count before pagination
+            var totalCount = await query.CountAsync();
 
-        public async Task<List<Article>> GetArticlesByIndexAsync(int index)
-        {
-            return await _context.Articles.Where(a => a.Index == index).ToListAsync();
-        }
+            // Apply pagination
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-        public async Task<List<Article>> GetArticlesByRAsync(decimal r)
-        {
-            return await _context.Articles.Where(a => a.R == r).ToListAsync();
+            return (items, totalCount);
         }
-
-        public async Task<List<Article>> GetArticlesByRUnitAsync(string rUnit)
-        {
-            return await _context.Articles.Where(a => a.RUnit == rUnit).ToListAsync();
-        }
-
-        public async Task<List<Article>> GetArticlesByApplicationAsync(string application)
-        {
-            return await _context.Articles.Where(a => a.Application == application).ToListAsync();
-        }
-
-        public async Task<List<Article>> GetArticlesByExtraInfoAsync(string extraInfo)
-        {
-            return await _context.Articles.Where(a => a.ExtraInfo == extraInfo).ToListAsync();
-        }
+   
 }

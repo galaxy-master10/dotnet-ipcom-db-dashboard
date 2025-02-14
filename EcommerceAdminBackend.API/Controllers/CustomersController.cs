@@ -21,7 +21,12 @@ namespace EcommerceAdminBackend.API.Controllers
         public async Task<ActionResult<PaginatedResponse<Customer>>> GetFilteredAsync(
             [FromQuery] CustomerFilterDto filter, int pageNumber = 1, int pageSize = 10)
         {
-            return await _customerService.GetFilteredAsync(filter, pageNumber, pageSize);
+            var result = await _customerService.GetFilteredAsync(filter, pageNumber, pageSize);
+
+            if (result.Data.Count == 0)
+                return NotFound("No customers found matching the specified criteria.");
+
+            return Ok(result);
         }
         
         [HttpGet("{id}")]
