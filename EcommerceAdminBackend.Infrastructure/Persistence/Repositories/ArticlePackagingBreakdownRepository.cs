@@ -27,7 +27,7 @@ public class ArticlePackagingBreakdownRepository : IArticlePackagingBreakdownRep
     {
         var query = _context.ArticlePackagingBreakdowns.AsQueryable();
 
-        // Apply filters
+     
         if (filter.Id.HasValue)
             query = query.Where(x => x.Id == filter.Id);
 
@@ -70,10 +70,10 @@ public class ArticlePackagingBreakdownRepository : IArticlePackagingBreakdownRep
         if (filter.IsMinimumPackaging.HasValue)
             query = query.Where(x => x.IsMinimumPackaging == filter.IsMinimumPackaging);
 
-        // Get total count before pagination
+      
         var totalCount = await query.CountAsync();
 
-        // Apply pagination
+       
         var items = await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)

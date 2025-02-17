@@ -1,4 +1,5 @@
 
+using EcommerceAdminBackend.Application.Validators.Filters;
 using EcommerceAdminBackend.Domain.DTOs.Filters;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Domain.Interfaces;
@@ -9,11 +10,16 @@ namespace EcommerceAdminBackend.Application.Services;
 public class ArticlePackagingBreakdownService : IArticlePackagingBreakdownService
 {
     private readonly IArticlePackagingBreakdownRepository _repository;
+    private readonly ArticlePackagingBreakdownFilterValidator _filterValidator;
 
-    public ArticlePackagingBreakdownService(IArticlePackagingBreakdownRepository repository)
+    public ArticlePackagingBreakdownService(
+        IArticlePackagingBreakdownRepository repository,
+        ArticlePackagingBreakdownFilterValidator filterValidator)
     {
         _repository = repository;
+        _filterValidator = filterValidator;
     }
+
 
     public async Task<ArticlePackagingBreakdown?> GetByIdAsync(int id)
     {
@@ -26,15 +32,12 @@ public class ArticlePackagingBreakdownService : IArticlePackagingBreakdownServic
     public async Task<PaginatedResponse<ArticlePackagingBreakdown>> GetFilteredAsync(
         ArticlePackagingBreakdownFilterDto filter, int pageNumber = 1, int pageSize = 10)
     {
-        // Validate input
-        if (pageNumber < 1) pageNumber = 1;
-        if (pageSize < 1) pageSize = 10;
+        // Validate pagination
+        pageNumber = Math.Max(1, pageNumber);
+        pageSize = Math.Max(1, Math.Min(pageSize, 100)); // Add max limit
 
-        // Validate filter ranges
-        if (filter != null)
-        {
-            ValidateRanges(filter);
-        }
+        // Validate filter
+        _filterValidator.ValidateAndNormalize(filter);
 
         var (items, totalCount) = await _repository.GetFilteredAsync(filter, pageNumber, pageSize);
 
@@ -45,19 +48,7 @@ public class ArticlePackagingBreakdownService : IArticlePackagingBreakdownServic
             totalCount
         );
     }
+    
 
-    private void ValidateRanges(ArticlePackagingBreakdownFilterDto filter)
-    {
-        if (filter.MinFromFactor.HasValue && filter.MaxFromFactor.HasValue && 
-            filter.MinFromFactor > filter.MaxFromFactor)
-            (filter.MinFromFactor, filter.MaxFromFactor) = (filter.MaxFromFactor, filter.MinFromFactor);
-
-        if (filter.MinToFactor.HasValue && filter.MaxToFactor.HasValue && 
-            filter.MinToFactor > filter.MaxToFactor)
-            (filter.MinToFactor, filter.MaxToFactor) = (filter.MaxToFactor, filter.MinToFactor);
-
-        if (filter.MinCubes.HasValue && filter.MaxCubes.HasValue && 
-            filter.MinCubes > filter.MaxCubes)
-            (filter.MinCubes, filter.MaxCubes) = (filter.MaxCubes, filter.MinCubes);
-    }
+   
 }

@@ -25,7 +25,7 @@ public class ArticleRepository : IArticleRepository
         {
             var query = _context.Articles.AsQueryable();
 
-            // Apply filters
+         
             if (filter.Id.HasValue)
                 query = query.Where(x => x.Id == filter.Id);
 

@@ -4,6 +4,7 @@ using EcommerceAdminBackend.Infrastructure.Persistence.Context;
 using EcommerceAdminBackend.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EcommerceAdminBackend.Application.Services;
+using EcommerceAdminBackend.Application.Validators.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 builder.Services.AddControllers();
+
+// all validators
+builder.Services.AddScoped<ArticlePackagingBreakdownFilterValidator>();
+builder.Services.AddSingleton<ArticleFilterValidator>();
+builder.Services.AddSingleton<ArticleXAvailableStockFilterValidator>();
+builder.Services.AddSingleton<CustomerFilterValidator>();
+
+
 
 // all repositories 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
