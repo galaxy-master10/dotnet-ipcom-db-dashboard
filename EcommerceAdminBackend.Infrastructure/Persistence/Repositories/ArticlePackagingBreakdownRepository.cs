@@ -1,4 +1,5 @@
 
+using EcommerceAdminBackend.Domain.DTOs.Filters;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Infrastructure.Persistence.Context;
 using EcommerceAdminBackend.Domain.Interfaces;
@@ -16,76 +17,68 @@ public class ArticlePackagingBreakdownRepository : IArticlePackagingBreakdownRep
     }
 
 
-    public async Task<List<ArticlePackagingBreakdown>> GetAllArticlePackagingBreakdownsAsync(int pageNumber, int pageSize)
-    {
-        return await _context.ArticlePackagingBreakdowns
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-    }
-
-    public async Task<int> GetTotalArticlePackagingBreakdownsCountAsync()
-    {
-        return await _context.ArticlePackagingBreakdowns.CountAsync();
-    }
-
-    public async Task<ArticlePackagingBreakdown?> GetArticlePackagingBreakdownByIdAsync(int id)
+    public async Task<ArticlePackagingBreakdown?> GetByIdAsync(int id)
     {
         return await _context.ArticlePackagingBreakdowns.FindAsync(id);
     }
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByArticleIdAsync(int articleId)
+    public async Task<(List<ArticlePackagingBreakdown> Items, int TotalCount)> GetFilteredAsync(
+        ArticlePackagingBreakdownFilterDto filter, int pageNumber, int pageSize)
     {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.ArticleId == articleId).ToListAsync();
-    }
+        var query = _context.ArticlePackagingBreakdowns.AsQueryable();
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromUnitAsync(string fromUnit)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.FromUnit == fromUnit).ToListAsync();
-    }
+        // Apply filters
+        if (filter.Id.HasValue)
+            query = query.Where(x => x.Id == filter.Id);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToUnitAsync(string toUnit)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.ToUnit == toUnit).ToListAsync();
-    }
+        if (filter.ArticleId.HasValue)
+            query = query.Where(x => x.ArticleId == filter.ArticleId);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromUnitIdAsync(int fromUnitId)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.FromUnitId == fromUnitId).ToListAsync();
-    }
+        if (!string.IsNullOrEmpty(filter.FromUnit))
+            query = query.Where(x => x.FromUnit == filter.FromUnit);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToUnitIdAsync(int toUnitId)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.ToUnitId == toUnitId).ToListAsync();
-    }
+        if (filter.FromUnitId.HasValue)
+            query = query.Where(x => x.FromUnitId == filter.FromUnitId);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromFactorAsync(decimal fromFactor)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.FromFactor == fromFactor).ToListAsync();
-    }
+        if (filter.MinFromFactor.HasValue)
+            query = query.Where(x => x.FromFactor >= filter.MinFromFactor);
+        if (filter.MaxFromFactor.HasValue)
+            query = query.Where(x => x.FromFactor <= filter.MaxFromFactor);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToFactorAsync(decimal toFactor)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.ToFactor == toFactor).ToListAsync();
-    }
+        if (!string.IsNullOrEmpty(filter.ToUnit))
+            query = query.Where(x => x.ToUnit == filter.ToUnit);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByCubesAsync(decimal cubes)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.Cubes == cubes).ToListAsync();
-    }
+        if (filter.ToUnitId.HasValue)
+            query = query.Where(x => x.ToUnitId == filter.ToUnitId);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByStatusInUseAsync(bool statusInUse)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.StatusInUse == statusInUse).ToListAsync();
-    }
+        if (filter.MinToFactor.HasValue)
+            query = query.Where(x => x.ToFactor >= filter.MinToFactor);
+        if (filter.MaxToFactor.HasValue)
+            query = query.Where(x => x.ToFactor <= filter.MaxToFactor);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByIsERPAsync(bool isERP)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.IsERP == isERP).ToListAsync();
-    }
+        if (filter.MinCubes.HasValue)
+            query = query.Where(x => x.Cubes >= filter.MinCubes);
+        if (filter.MaxCubes.HasValue)
+            query = query.Where(x => x.Cubes <= filter.MaxCubes);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByIsMinimumPackagingAsync(bool isMinimumPackaging)
-    {
-        return await _context.ArticlePackagingBreakdowns.Where(a => a.IsMinimumPackaging == isMinimumPackaging).ToListAsync();
+        if (filter.StatusInUse.HasValue)
+            query = query.Where(x => x.StatusInUse == filter.StatusInUse);
+
+        if (filter.IsERP.HasValue)
+            query = query.Where(x => x.IsERP == filter.IsERP);
+
+        if (filter.IsMinimumPackaging.HasValue)
+            query = query.Where(x => x.IsMinimumPackaging == filter.IsMinimumPackaging);
+
+        // Get total count before pagination
+        var totalCount = await query.CountAsync();
+
+        // Apply pagination
+        var items = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
     }
 }

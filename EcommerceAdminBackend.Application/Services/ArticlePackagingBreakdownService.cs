@@ -1,4 +1,5 @@
 
+using EcommerceAdminBackend.Domain.DTOs.Filters;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Shared.Common.Utilities;
@@ -7,77 +8,56 @@ namespace EcommerceAdminBackend.Application.Services;
 
 public class ArticlePackagingBreakdownService : IArticlePackagingBreakdownService
 {
-    private readonly IArticlePackagingBreakdownRepository _articlePackagingBreakdownRepository;
+    private readonly IArticlePackagingBreakdownRepository _repository;
 
-    public ArticlePackagingBreakdownService(IArticlePackagingBreakdownRepository articlePackagingBreakdownRepository)
+    public ArticlePackagingBreakdownService(IArticlePackagingBreakdownRepository repository)
     {
-        _articlePackagingBreakdownRepository = articlePackagingBreakdownRepository;
+        _repository = repository;
     }
 
-    public async Task<PaginatedResponse<ArticlePackagingBreakdown>> GetAllArticlePackagingBreakdownAsync(int pageNumber, int pageSize)
+    public async Task<ArticlePackagingBreakdown?> GetByIdAsync(int id)
     {
-        var totalBreakdowns = await _articlePackagingBreakdownRepository.GetTotalArticlePackagingBreakdownsCountAsync();
-        var breakdowns = await _articlePackagingBreakdownRepository.GetAllArticlePackagingBreakdownsAsync(pageNumber, pageSize);
-        return new PaginatedResponse<ArticlePackagingBreakdown>(breakdowns, pageNumber, pageSize, totalBreakdowns);
+        if (id <= 0)
+            return null;
+
+        return await _repository.GetByIdAsync(id);
     }
 
-    public async Task<ArticlePackagingBreakdown?> GetArticlePackagingBreakdownByIdAsync(int id)
+    public async Task<PaginatedResponse<ArticlePackagingBreakdown>> GetFilteredAsync(
+        ArticlePackagingBreakdownFilterDto filter, int pageNumber = 1, int pageSize = 10)
     {
-        return await _articlePackagingBreakdownRepository.GetArticlePackagingBreakdownByIdAsync(id);
+        // Validate input
+        if (pageNumber < 1) pageNumber = 1;
+        if (pageSize < 1) pageSize = 10;
+
+        // Validate filter ranges
+        if (filter != null)
+        {
+            ValidateRanges(filter);
+        }
+
+        var (items, totalCount) = await _repository.GetFilteredAsync(filter, pageNumber, pageSize);
+
+        return new PaginatedResponse<ArticlePackagingBreakdown>(
+            items,
+            pageNumber,
+            pageSize,
+            totalCount
+        );
     }
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByArticleIdAsync(int articleId)
+    private void ValidateRanges(ArticlePackagingBreakdownFilterDto filter)
     {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByArticleIdAsync(articleId);
-    }
+        if (filter.MinFromFactor.HasValue && filter.MaxFromFactor.HasValue && 
+            filter.MinFromFactor > filter.MaxFromFactor)
+            (filter.MinFromFactor, filter.MaxFromFactor) = (filter.MaxFromFactor, filter.MinFromFactor);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromUnitAsync(string fromUnit)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByFromUnitAsync(fromUnit);
-    }
+        if (filter.MinToFactor.HasValue && filter.MaxToFactor.HasValue && 
+            filter.MinToFactor > filter.MaxToFactor)
+            (filter.MinToFactor, filter.MaxToFactor) = (filter.MaxToFactor, filter.MinToFactor);
 
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToUnitAsync(string toUnit)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByToUnitAsync(toUnit);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromUnitIdAsync(int fromUnitId)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByFromUnitIdAsync(fromUnitId); 
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToUnitIdAsync(int toUnitId)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByToUnitIdAsync(toUnitId);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByFromFactorAsync(decimal fromFactor)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByFromFactorAsync(fromFactor);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByToFactorAsync(decimal toFactor)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByToFactorAsync(toFactor);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByCubesAsync(decimal cubes)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByCubesAsync(cubes);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByStatusInUseAsync(bool statusInUse)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByStatusInUseAsync(statusInUse);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByIsERPAsync(bool isERP)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByIsERPAsync(isERP);
-    }
-
-    public async Task<List<ArticlePackagingBreakdown>> GetBreakdownsByIsMinimumPackagingAsync(bool isMinimumPackaging)
-    {
-        return await _articlePackagingBreakdownRepository.GetBreakdownsByIsMinimumPackagingAsync(isMinimumPackaging);
+        if (filter.MinCubes.HasValue && filter.MaxCubes.HasValue && 
+            filter.MinCubes > filter.MaxCubes)
+            (filter.MinCubes, filter.MaxCubes) = (filter.MaxCubes, filter.MinCubes);
     }
 }
