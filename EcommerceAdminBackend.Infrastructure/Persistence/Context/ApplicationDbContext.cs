@@ -31,6 +31,8 @@ namespace EcommerceAdminBackend.Infrastructure.Persistence.Context;
             modelBuilder.Entity<ArticlePackagingBreakdown>(entity =>
             {
                 entity.ToTable("ArticlePackagingBreakdown"); // Specify the correct table name here
+                entity.Property(e => e.Cubes)
+                    .HasColumnType("decimal(18,2)");
             });
             
             modelBuilder.Entity<ArticleXAvailableStock>(entity =>

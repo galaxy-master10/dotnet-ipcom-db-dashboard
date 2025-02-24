@@ -26,6 +26,7 @@ public class CustomerRepository: ICustomerRepository
             CustomerFilterDto filter, int pageNumber, int pageSize)
         {
             var query = _context.Customers.AsQueryable();
+            query = query.OrderBy(c => c.Id); // or c.CreatedTS, etc.
 
             // Apply filters
             if (filter.Id.HasValue)
