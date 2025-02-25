@@ -20,9 +20,14 @@ public class ArticleXAvailableStockService : IArticleXAvailableStockService
     }
 
 
-    public async Task<ArticleXAvailableStock?> GetAvailableStockByIdAsync(int articleId, int companyStockLocationId)
+    public async Task<ArticleXAvailableStock?> GetAvailableStockByIdAndLocationIdAsync(int articleId, int companyStockLocationId)
     {
-        return await _repository.GetByIdAsync(articleId, companyStockLocationId);
+        return await _repository.GetByIdAndLocationIdAsync(articleId, companyStockLocationId);
+    }
+
+    public async Task<ArticleXAvailableStock?> GetAvailableStockByIdAsync(int articleId)
+    {
+        return await _repository.GetByIdAsync(articleId);
     }
 
     public async Task<PaginatedResponse<ArticleXAvailableStock>> GetFilteredAsync(

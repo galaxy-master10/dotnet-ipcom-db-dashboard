@@ -32,13 +32,28 @@ namespace EcommerceAdminBackend.API.Controllers
         }
         
         [HttpGet("{articleId}/{companyStockLocationId}")]
-        public async Task<ActionResult<ArticleXAvailableStock>> GetArticleXAvailableStock(
+        public async Task<ActionResult<ArticleXAvailableStock>> GetArticleXAvailableStockByIdAndLocationId(
             int articleId, 
             int companyStockLocationId)
         {
-            var articleXAvailableStock = await _articleXAvailableStockService.GetAvailableStockByIdAsync(
+            var articleXAvailableStock = await _articleXAvailableStockService.GetAvailableStockByIdAndLocationIdAsync(
                 articleId, 
                 companyStockLocationId);
+
+            if (articleXAvailableStock == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(articleXAvailableStock);
+        }
+        
+        [HttpGet("{articleId}")]
+        public async Task<ActionResult<ArticleXAvailableStock>> GetArticleXAvailableStock(
+            int articleId)
+        {
+            var articleXAvailableStock = await _articleXAvailableStockService.GetAvailableStockByIdAsync(
+                articleId);
 
             if (articleXAvailableStock == null)
             {

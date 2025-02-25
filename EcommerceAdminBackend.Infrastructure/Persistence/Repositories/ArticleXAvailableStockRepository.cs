@@ -21,9 +21,14 @@ public class ArticleXAvailableStockRepository : IArticleXAvailableStockRepositor
         return _context.ArticleXAvailableStocks;
     }
 
-    public async Task<ArticleXAvailableStock?> GetByIdAsync(int articleId, int companyStockLocationId)
+    public async Task<ArticleXAvailableStock?> GetByIdAndLocationIdAsync(int articleId, int companyStockLocationId)
     {
         return await _context.ArticleXAvailableStocks.FindAsync(articleId, companyStockLocationId);
+    }
+
+    public async Task<ArticleXAvailableStock?> GetByIdAsync(int articleId)
+    {
+        return await _context.ArticleXAvailableStocks.FindAsync(articleId);
     }
 
     public async Task<(List<ArticleXAvailableStock> Items, int TotalCount)> GetFilteredAsync(
