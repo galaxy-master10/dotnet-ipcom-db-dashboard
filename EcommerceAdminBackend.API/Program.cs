@@ -1,9 +1,7 @@
 
+using System.Net;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using EcommerceAdminBackend.API.Interfaces;
-using EcommerceAdminBackend.API.Middlewares;
-using EcommerceAdminBackend.API.Services;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Infrastructure.Persistence.Context;
 using EcommerceAdminBackend.Infrastructure.Persistence.Repositories;
@@ -19,30 +17,29 @@ using Microsoft.Extensions.Azure;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Add configuration files: appsettings.json and environment-specific appsettings.{environment}.json
 builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory()) // Set the base path for configuration files
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true); // Load appsettings.json
+    .SetBasePath(Directory.GetCurrentDirectory()) 
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true); 
 
-// Add Key Vault configuration
+
 var keyVaultUri = builder.Configuration.GetSection("KeyVault:KeyVaultURL").Value;
 var clientId = builder.Configuration.GetSection("KeyVault:ClientId").Value;
 var clientSecret = builder.Configuration.GetSection("KeyVault:ClientSecret").Value;
 var directoryId = builder.Configuration.GetSection("KeyVault:DirectoryId").Value;
 
-// Configure Azure Key Vault for secrets
+
 if (!string.IsNullOrEmpty(keyVaultUri))
 {
-    // Create credential using the client secret
+   
     var credential = new ClientSecretCredential(directoryId, clientId, clientSecret);
     
-    // Register Secret Client for DI
+    
     builder.Services.AddSingleton(sp => new SecretClient(new Uri(keyVaultUri), credential));
     
-    // Add Key Vault as a configuration source
+   
     builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), credential);
     
-    // Register Azure clients
+    
     builder.Services.AddAzureClients(clientBuilder =>
     {
         clientBuilder.AddSecretClient(new Uri(keyVaultUri));
@@ -50,25 +47,26 @@ if (!string.IsNullOrEmpty(keyVaultUri))
     });
 }
 
-// Setup Microsoft Authentication
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
-// Add API Key Service
-builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
 
-// Add API Key middleware
-builder.Services.AddTransient<ApiKeyAuthMiddleware>();
+
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    serverOptions.ListenLocalhost(5261); // HTTP port
-    serverOptions.ListenLocalhost(5262, listenOptions =>
+    serverOptions.Listen(IPAddress.Any, 5261); 
+    serverOptions.Listen(IPAddress.Any, 5262, listenOptions =>
     {
-        listenOptions.UseHttps(); // HTTPS port
+        
+        listenOptions.UseHttps(httpsOptions =>
+        {
+            httpsOptions.AllowAnyClientCertificate();
+            httpsOptions.SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13;
+        });
     });
 });
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -99,52 +97,7 @@ builder.Services.AddScoped<IArticleXAvailableStockService, ArticleXAvailableStoc
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    // Configure Swagger to include authentication
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityDefinition("ApiKey", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Description = "API Key authentication. Example: \"X-API-Key: {apikey}\"",
-        Name = "X-API-Key",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
-    });
-
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        },
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "ApiKey"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
@@ -156,12 +109,15 @@ builder.Services.AddCors(options =>
                     "https://localhost:5173",  // Local HTTPS
                     "http://10.1.3.59:5173",   // Network access
                     "https://10.1.3.59:5173",  // Network HTTPS
-                    "https://192.168.0.158:5173/"
+                    "https://192.168.0.158:5173",
+                    "https://10.100.0.24:5173",
+                    "http://10.100.0.22:5173",
+                    "https://10.100.0.22:5173"
                     
                     )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials();
+                .AllowCredentials(); 
         });
 });
 
@@ -186,8 +142,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication(); // Must come before UseAuthorization
 app.UseAuthorization();
 
-// Add custom API Key authentication middleware
-app.UseMiddleware<ApiKeyAuthMiddleware>();
 
 app.MapControllers();
 
