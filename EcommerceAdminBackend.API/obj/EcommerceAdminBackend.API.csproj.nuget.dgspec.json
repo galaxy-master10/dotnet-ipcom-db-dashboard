@@ -1,0 +1,503 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/EcommerceAdminBackend.API.csproj": {}
+  },
+  "projects": {
+    "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/EcommerceAdminBackend.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/EcommerceAdminBackend.API.csproj",
+        "projectName": "EcommerceAdminBackend.API",
+        "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/EcommerceAdminBackend.API.csproj",
+        "packagesPath": "/Users/ipcom/.nuget/packages/",
+        "outputPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/ipcom/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj"
+              },
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj"
+              },
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Infrastructure/EcommerceAdminBackend.Infrastructure.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Infrastructure/EcommerceAdminBackend.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Azure.Extensions.AspNetCore.Configuration.Secrets": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "Azure.Extensions.AspNetCore.DataProtection.Blobs": {
+              "target": "Package",
+              "version": "[1.5.0, )"
+            },
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.13.2, )"
+            },
+            "Azure.Security.KeyVault.Secrets": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools.DotNet": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "Microsoft.Extensions.Azure": {
+              "target": "Package",
+              "version": "[1.10.0, )"
+            },
+            "Microsoft.Extensions.Configuration.AzureKeyVault": {
+              "target": "Package",
+              "version": "[3.1.24, )"
+            },
+            "Microsoft.Identity.Web.UI": {
+              "target": "Package",
+              "version": "[3.7.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/ipcom/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj",
+        "projectName": "EcommerceAdminBackend.Application",
+        "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj",
+        "packagesPath": "/Users/ipcom/.nuget/packages/",
+        "outputPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/ipcom/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools.DotNet": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/ipcom/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj",
+        "projectName": "EcommerceAdminBackend.Domain",
+        "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj",
+        "packagesPath": "/Users/ipcom/.nuget/packages/",
+        "outputPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/ipcom/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/EcommerceAdminBackend.Shared.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/EcommerceAdminBackend.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools.DotNet": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "Microsoft.Identity.Web": {
+              "target": "Package",
+              "version": "[3.7.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/ipcom/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Infrastructure/EcommerceAdminBackend.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Infrastructure/EcommerceAdminBackend.Infrastructure.csproj",
+        "projectName": "EcommerceAdminBackend.Infrastructure",
+        "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Infrastructure/EcommerceAdminBackend.Infrastructure.csproj",
+        "packagesPath": "/Users/ipcom/.nuget/packages/",
+        "outputPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/ipcom/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Application/EcommerceAdminBackend.Application.csproj"
+              },
+              "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj": {
+                "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain/EcommerceAdminBackend.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools.DotNet": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "Microsoft.Identity.Web": {
+              "target": "Package",
+              "version": "[3.7.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/ipcom/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/EcommerceAdminBackend.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/EcommerceAdminBackend.Shared.csproj",
+        "projectName": "EcommerceAdminBackend.Shared",
+        "projectPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/EcommerceAdminBackend.Shared.csproj",
+        "packagesPath": "/Users/ipcom/.nuget/packages/",
+        "outputPath": "/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/ipcom/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/Users/ipcom/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

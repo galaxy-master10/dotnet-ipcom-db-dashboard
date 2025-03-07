@@ -1,0 +1,5 @@
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain2/obj/Debug/net9.0/EcommerceAdminBackend.Domain2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain2/obj/Debug/net9.0/EcommerceAdminBackend.Domain2.AssemblyInfoInputs.cache
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain2/obj/Debug/net9.0/EcommerceAdminBackend.Domain2.AssemblyInfo.cs
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain2/obj/Debug/net9.0/EcommerceAdminBackend.Domain2.csproj.CoreCompileInputs.cache
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Domain2/obj/Debug/net9.0/EcommerceAdminBackend.Domain2.sourcelink.json

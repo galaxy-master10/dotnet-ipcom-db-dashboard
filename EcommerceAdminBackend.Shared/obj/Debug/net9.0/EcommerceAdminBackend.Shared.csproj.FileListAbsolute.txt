@@ -1,0 +1,12 @@
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/bin/Debug/net9.0/EcommerceAdminBackend.Shared.deps.json
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/bin/Debug/net9.0/EcommerceAdminBackend.Shared.dll
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/bin/Debug/net9.0/EcommerceAdminBackend.Shared.pdb
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.AssemblyInfoInputs.cache
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.AssemblyInfo.cs
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.csproj.CoreCompileInputs.cache
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.sourcelink.json
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.dll
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/refint/EcommerceAdminBackend.Shared.dll
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/EcommerceAdminBackend.Shared.pdb
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.Shared/obj/Debug/net9.0/ref/EcommerceAdminBackend.Shared.dll
