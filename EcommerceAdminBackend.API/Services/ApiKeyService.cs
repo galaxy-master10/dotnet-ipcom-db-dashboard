@@ -1,4 +1,6 @@
+using System;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Azure.Security.KeyVault.Secrets;
 using EcommerceAdminBackend.API.Interfaces;
 
@@ -7,53 +9,68 @@ namespace EcommerceAdminBackend.API.Services;
 public class ApiKeyService : IApiKeyService
 {
     private readonly SecretClient _secretClient;
+    private const string ApiKeyName = "ApplicationApiKey";
+    private const int DefaultExpirationDays = 30;
 
     public ApiKeyService(SecretClient secretClient)
     {
         _secretClient = secretClient;
     }
 
-    public async Task<string> GenerateApiKeyForUserAsync(string userId)
+    public async Task<string> GetApiKeyAsync()
     {
-        // Generate a unique API key using a secure random generator
-        var apiKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
-            
-        // Store the API key in Azure Key Vault with user ID as part of the key name
-        // Format: "apikey-{userId}"
-        await _secretClient.SetSecretAsync($"apikey-{userId}", apiKey);
-            
-        return apiKey;
-    }
-
-    public async Task<bool> ValidateApiKeyAsync(string apiKey, string userId)
-    {
-        try
+        try 
         {
-            // Retrieve the stored API key from Azure Key Vault
-            var secret = await _secretClient.GetSecretAsync($"apikey-{userId}");
-            var storedApiKey = secret.Value.Value;
-                
-            // Compare the provided API key with the stored one
-            return apiKey == storedApiKey;
+            var secret = await _secretClient.GetSecretAsync(ApiKeyName);
+            return secret.Value.Value;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // If the API key doesn't exist or any other error occurs
-            return false;
+           
+            throw new Exception("Failed to retrieve API key", ex);
         }
     }
 
-    public async Task<bool> RevokeApiKeyAsync(string userId)
+    public async Task<DateTime> GetApiKeyExpirationAsync()
+    {
+        var secret = await _secretClient.GetSecretAsync(ApiKeyName);
+        return secret.Value.Properties.ExpiresOn?.DateTime ?? DateTime.UtcNow.AddDays(1);
+    }
+    
+    public async Task<bool> IsApiKeyValidAsync()
     {
         try
         {
-            // Delete the API key from the Key Vault
-            await _secretClient.StartDeleteSecretAsync($"apikey-{userId}");
-            return true;
+            var expirationDate = await GetApiKeyExpirationAsync();
+            return expirationDate > DateTime.UtcNow;
         }
-        catch (Exception)
+        catch
         {
             return false;
         }
+    }
+    public async Task<(string apiKey, DateTime expiresAt)> GenerateNewApiKeyAsync(int expirationDays = DefaultExpirationDays)
+    {
+  
+        byte[] keyBytes = new byte[24]; 
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(keyBytes);
+        }
+        string apiKey = Convert.ToBase64String(keyBytes);
+            
+        
+        DateTime expirationDate = DateTime.UtcNow.AddDays(expirationDays);
+        
+        
+        var secret = new KeyVaultSecret(ApiKeyName, apiKey);
+        
+        
+        secret.Properties.ExpiresOn = expirationDate;
+        
+        
+        await _secretClient.SetSecretAsync(secret);
+        
+        return (apiKey, expirationDate);
     }
 }

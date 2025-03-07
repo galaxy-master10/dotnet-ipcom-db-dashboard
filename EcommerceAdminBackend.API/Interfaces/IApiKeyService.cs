@@ -2,7 +2,9 @@ namespace EcommerceAdminBackend.API.Interfaces;
 
 public interface IApiKeyService
 {
-    Task<string> GenerateApiKeyForUserAsync(string userId);
-    Task<bool> ValidateApiKeyAsync(string apiKey, string userId);
-    Task<bool> RevokeApiKeyAsync(string userId);
+    Task<string> GetApiKeyAsync();
+    Task<DateTime> GetApiKeyExpirationAsync();
+    Task<bool> IsApiKeyValidAsync();
+    Task<(string apiKey, DateTime expiresAt)> GenerateNewApiKeyAsync(int expirationDays = 30);
+
 }

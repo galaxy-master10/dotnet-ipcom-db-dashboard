@@ -2,12 +2,14 @@ using EcommerceAdminBackend.Domain.DTOs;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Shared.Common.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceAdminBackend.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArticleXAvailableStockController : ControllerBase
     {
         private readonly IArticleXAvailableStockService _articleXAvailableStockService;

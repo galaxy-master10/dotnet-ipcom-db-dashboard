@@ -2,6 +2,9 @@
 using System.Net;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using EcommerceAdminBackend.API.Interfaces;
+using EcommerceAdminBackend.API.Middlewares;
+using EcommerceAdminBackend.API.Services;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Infrastructure.Persistence.Context;
 using EcommerceAdminBackend.Infrastructure.Persistence.Repositories;
@@ -11,7 +14,7 @@ using EcommerceAdminBackend.Application.Validators.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Azure;
-
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -95,9 +98,65 @@ builder.Services.AddScoped<IArticlePackagingBreakdownService, ArticlePackagingBr
 builder.Services.AddScoped<IArticleXAvailableStockService, ArticleXAvailableStockService>();
 
 
+//builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
+
+builder.Services.AddSingleton<IApiKeyService, InMemoryApiKeyService>();
+
+
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EcommerceAdminBackend API", Version = "v1" });
+    
+   
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer [token]'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "API Key authentication. Enter your API key",
+        Name = "X-API-Key",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "ApiKey"
+    });
+
+    
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        },
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 builder.Services.AddCors(options =>
 {
@@ -135,11 +194,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors("AllowVueApp");
 app.UseHttpsRedirection();
+app.UseCors("AllowVueApp");
 
-// Add authentication and authorization middleware
-app.UseAuthentication(); // Must come before UseAuthorization
+
+
+app.UseAuthentication(); 
+
+app.UseMiddleware<ApiKeyMiddleware>();
+
 app.UseAuthorization();
 
 

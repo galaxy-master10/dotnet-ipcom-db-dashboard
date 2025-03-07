@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EcommerceAdminBackend.Domain.Entities;
 using EcommerceAdminBackend.Shared.Common.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcommerceAdminBackend.API.Controllers
 
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _articleService;

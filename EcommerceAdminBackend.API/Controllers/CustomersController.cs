@@ -3,11 +3,13 @@ using EcommerceAdminBackend.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using EcommerceAdminBackend.Domain.Interfaces;
 using EcommerceAdminBackend.Shared.Common.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcommerceAdminBackend.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CustomersController : ControllerBase
     {
       private readonly ICustomerService _customerService;
