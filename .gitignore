@@ -69,6 +69,7 @@ ipch/
 appsettings.json
 appsettings.Development.json
 #appsettings.*.json
+#appsettings.example.json
 *.pfx
 *.publishsettings
 **/Properties/launchSettings.json
