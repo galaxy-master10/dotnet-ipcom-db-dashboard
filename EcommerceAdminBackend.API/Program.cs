@@ -11,6 +11,9 @@ using EcommerceAdminBackend.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EcommerceAdminBackend.Application.Services;
 using EcommerceAdminBackend.Application.Validators.Filters;
+using EcommerceAdminBackend.Domain.DTOs;
+using EcommerceAdminBackend.Domain.DTOs.Custom;
+using EcommerceAdminBackend.Domain.DTOs.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using Microsoft.Extensions.Azure;
@@ -75,7 +78,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 
 // all validators
 builder.Services.AddScoped<ArticlePackagingBreakdownFilterValidator>();
@@ -204,9 +207,342 @@ app.UseAuthentication();
 app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseAuthorization();
+//app.MapControllers();
 
 
-app.MapControllers();
+//=============================================================================
+// CUSTOMERS API ENDPOINTS
+//=============================================================================
+var customersGroup = app.MapGroup("/api/customers")
+    .RequireAuthorization()
+    .WithTags("Customers")
+    .WithDescription("Operations for managing customers");
 
+// Get filtered customers with pagination
+customersGroup.MapGet("/", async (
+        [AsParameters] CustomerFilterDto filter,
+        [AsParameters] PaginationParameters pagination,
+        ICustomerService customerService) =>
+    {
+        var pageNumber = pagination.PageNumber <= 0 ? 1 : pagination.PageNumber;
+        var pageSize = pagination.PageSize <= 0 ? 10 : pagination.PageSize;
+    
+        var result = await customerService.GetFilteredAsync(filter, pageNumber, pageSize);
+
+        if (result.Data.Count == 0)
+            return Results.NotFound("No customers found matching the specified criteria.");
+
+        return Results.Ok(result);
+    })
+    .WithName("GetFilteredCustomers")
+    .WithOpenApi();
+
+// Get customer by ID
+customersGroup.MapGet("/{id}", async (int id, ICustomerService customerService) =>
+    {
+        var customer = await customerService.GetByIdAsync(id);
+    
+        if (customer == null)
+            return Results.NotFound();
+
+        return Results.Ok(customer);
+    })
+    .WithName("GetCustomerById")
+    .WithOpenApi();
+
+//=============================================================================
+// ARTICLES API ENDPOINTS
+//=============================================================================
+
+
+var articlesGroup = app.MapGroup("/api/articles").RequireAuthorization().WithTags("Articles")
+    .WithDescription("Operations for managing articles");
+
+
+articlesGroup.MapGet("/", async (
+        [AsParameters] ArticleFilterDto filter,
+        [AsParameters] PaginationParameters pagination,
+        IArticleService articleService) =>
+    {
+        var pageNumber = pagination.PageNumber <= 0 ? 1 : pagination.PageNumber;
+        var pageSize = pagination.PageSize <= 0 ? 10 : pagination.PageSize;
+    
+        var result = await articleService.GetFilteredAsync(filter, pageNumber, pageSize);
+
+        if (result.Data.Count == 0)
+            return Results.NotFound("No articles found matching the specified criteria.");
+
+        return Results.Ok(result);
+    })
+    .WithName("GetArticles")
+    .WithOpenApi();
+
+articlesGroup.MapGet("/{id}", async (int id, IArticleService articleService) =>
+    {
+        var article = await articleService.GetByIdAsync(id);
+    
+        if (article == null)
+            return Results.NotFound($"Article with ID {id} not found.");
+
+        return Results.Ok(article);
+    })
+    .WithName("GetArticleById")
+    .WithOpenApi();
+
+//=============================================================================
+// ARTICLE PACKAGING BREAKDOWN API ENDPOINTS
+//=============================================================================
+
+
+var packagingBreakdownGroup = app.MapGroup("/api/articlepackagingbreakdown")
+    .RequireAuthorization()
+    .WithTags("Article Packaging Breakdowns")
+    .WithDescription("Operations for managing article packaging breakdowns");
+
+
+packagingBreakdownGroup.MapGet("/", async (
+        [AsParameters] ArticlePackagingBreakdownFilterDto filter,
+        [AsParameters] PaginationParameters pagination,
+        IArticlePackagingBreakdownService articlePackagingBreakdownService) =>
+    {
+        var pageNumber = pagination.PageNumber <= 0 ? 1 : pagination.PageNumber;
+        var pageSize = pagination.PageSize <= 0 ? 10 : pagination.PageSize;
+    
+        var result = await articlePackagingBreakdownService.GetFilteredAsync(filter, pageNumber, pageSize);
+
+        if (result.Data.Count == 0)
+            return Results.NotFound("No article packaging breakdowns found matching the specified criteria.");
+
+        return Results.Ok(result);
+    })
+    .WithName("GetArticlePackagingBreakdowns")
+    .WithOpenApi();
+
+
+packagingBreakdownGroup.MapGet("/{id}", async (int id, IArticlePackagingBreakdownService articlePackagingBreakdownService) =>
+    {
+        var result = await articlePackagingBreakdownService.GetByIdAsync(id);
+    
+        if (result == null)
+            return Results.NotFound($"Article packaging breakdown with ID {id} not found.");
+
+        return Results.Ok(result);
+    })
+    .WithName("GetArticlePackagingBreakdownById")
+    .WithOpenApi();
+
+//=============================================================================
+// ARTICLE AVAILABLE STOCK API ENDPOINTS
+//=============================================================================
+
+var availableStockGroup = app.MapGroup("/api/articlexavailablestock")
+    .RequireAuthorization()
+    .WithTags("Article Available Stock")
+    .WithDescription("Operations for managing article available stock");
+
+
+availableStockGroup.MapGet("/", async (
+    [AsParameters] ArticleXAvailableStockFilterDto filter,
+    [AsParameters] PaginationParameters pagination,
+    IArticleXAvailableStockService articleXAvailableStockService) =>
+{
+    var pageNumber = pagination.PageNumber <= 0 ? 1 : pagination.PageNumber;
+    var pageSize = pagination.PageSize <= 0 ? 10 : pagination.PageSize;
+    
+    var result = await articleXAvailableStockService.GetFilteredAsync(filter, pageNumber, pageSize);
+
+    if (result.Data.Count == 0)
+        return Results.NotFound("No article available stock found matching the specified criteria.");
+
+    return Results.Ok(result);
+})
+.WithName("GetArticleXAvailableStocks")
+.WithOpenApi();
+
+
+availableStockGroup.MapGet("/{articleId}/{companyStockLocationId}", async (
+    int articleId, 
+    int companyStockLocationId,
+    IArticleXAvailableStockService articleXAvailableStockService) =>
+{
+    var articleXAvailableStock = await articleXAvailableStockService.GetAvailableStockByIdAndLocationIdAsync(
+        articleId, 
+        companyStockLocationId);
+
+    if (articleXAvailableStock == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(articleXAvailableStock);
+})
+.WithName("GetArticleXAvailableStockByIdAndLocationId")
+.WithOpenApi();
+
+
+availableStockGroup.MapGet("/{articleId}", async (
+    int articleId,
+    IArticleXAvailableStockService articleXAvailableStockService) =>
+{
+    var articleXAvailableStock = await articleXAvailableStockService.GetAvailableStockByIdAsync(articleId);
+
+    if (articleXAvailableStock == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(articleXAvailableStock);
+})
+.WithName("GetArticleXAvailableStockById")
+.WithOpenApi();
+
+//=============================================================================
+// API KEY MANAGEMENT ENDPOINTS
+//=============================================================================
+
+
+var apiKeyGroup = app.MapGroup("/api/apikey").RequireAuthorization().WithTags("API Key Management")
+    .WithDescription("Operations for managing API keys");
+
+
+apiKeyGroup.MapGet("/", async (HttpContext httpContext, IApiKeyService apiKeyService) =>
+{
+    try
+    {
+        var userId = httpContext.User.Identity?.Name ?? "Unknown";
+        var isAuthenticated = httpContext.User.Identity?.IsAuthenticated ?? false;
+    
+        if (!isAuthenticated)
+        {
+            return Results.Unauthorized();
+        }
+    
+        try
+        {
+            var apiKeyExists = await apiKeyService.IsApiKeyValidAsync();
+            if (!apiKeyExists)
+            {
+                return Results.NotFound(new { 
+                    message = "No valid API key found. Please generate one first."
+                });
+            }
+            
+            var apiKey = await apiKeyService.GetApiKeyAsync();
+            var expirationDate = await apiKeyService.GetApiKeyExpirationAsync();
+            
+            // Calculate remaining time
+            var remainingTime = expirationDate - DateTime.UtcNow;
+            var remainingDays = Math.Round(remainingTime.TotalDays, 1);
+            
+            return Results.Ok(new { 
+                apiKey = apiKey,
+                expiresAt = expirationDate,
+                remainingDays = remainingDays,
+                user = userId
+            });
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("not found") || ex.Message.Contains("Failed to retrieve API key"))
+            {
+                return Results.NotFound(new { 
+                    message = "API key not found. Please generate one first.",
+                    error = ex.Message
+                });
+            }
+        
+            throw; 
+        }
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(
+            detail: ex.Message,
+            title: "Failed to get API key",
+            statusCode: 500
+        );
+    }
+})
+.WithName("GetApiKey")
+.WithOpenApi();
+
+
+apiKeyGroup.MapGet("/validate", async (IApiKeyService apiKeyService) =>
+{
+    try
+    {
+        var isValid = await apiKeyService.IsApiKeyValidAsync();
+        var expirationDate = await apiKeyService.GetApiKeyExpirationAsync();
+        var remainingTime = expirationDate - DateTime.UtcNow;
+        
+        return Results.Ok(new {
+            isValid = isValid,
+            expiresAt = expirationDate,
+            remainingDays = Math.Round(remainingTime.TotalDays, 1),
+            remainingHours = Math.Round(remainingTime.TotalHours, 1)
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(
+            detail: ex.Message,
+            title: "Failed to validate API key",
+            statusCode: 500
+        );
+    }
+})
+.WithName("ValidateApiKey")
+.WithOpenApi();
+
+
+apiKeyGroup.MapPost("/generate", async (int? expirationDays, IApiKeyService apiKeyService) =>
+{
+    var daysToExpire = expirationDays ?? 30;
+    var (apiKey, expiresAt) = await apiKeyService.GenerateNewApiKeyAsync(daysToExpire);
+        
+    return Results.Ok(new { 
+        apiKey = apiKey,
+        expiresAt = expiresAt,
+        message = "New API key generated successfully"
+    });
+})
+.WithName("GenerateApiKey")
+.WithOpenApi();
+
+
+apiKeyGroup.MapGet("/test-keyvault", async (SecretClient secretClient) =>
+{
+    try
+    {
+        var secrets = secretClient.GetPropertiesOfSecretsAsync();
+        var secretNames = new List<string>();
+    
+        await foreach (var secret in secrets)
+        {
+            secretNames.Add(secret.Name);
+        }
+    
+        return Results.Ok(new { 
+            message = "Key Vault connection successful", 
+            secretCount = secretNames.Count,
+            secretsExist = secretNames.Any(),
+            secretNames = secretNames
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(
+            detail: ex.Message + (ex.InnerException != null ? " | " + ex.InnerException.Message : ""),
+            title: "Key Vault connection failed",
+            statusCode: 500
+        );
+    }
+})
+.WithName("TestKeyVault")
+.WithOpenApi();
 
 app.Run();
+record PaginationParameters(int PageNumber = 1, int PageSize = 10);
+
+
+

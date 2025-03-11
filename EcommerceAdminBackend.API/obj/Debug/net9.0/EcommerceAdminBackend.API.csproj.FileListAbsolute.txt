@@ -312,3 +312,4 @@
 /Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/bin/Debug/net9.0/Microsoft.Rest.ClientRuntime.dll
 /Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/bin/Debug/net9.0/Microsoft.Rest.ClientRuntime.Azure.dll
 /Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/bin/Debug/net9.0/System.IO.Hashing.dll
+/Users/ipcom/Documents/EcommerceAdminBackend/EcommerceAdminBackend/EcommerceAdminBackend.API/bin/Debug/net9.0/appsettings.example.json
